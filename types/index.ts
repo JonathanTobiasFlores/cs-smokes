@@ -44,4 +44,5 @@ export type RootStackParamList = {
   MapDetail: { mapId: string; mapName: string };
   LineupDetail: { lineup: Lineup };
   UploadTest: undefined;
+  SupabaseTest: undefined;
 };

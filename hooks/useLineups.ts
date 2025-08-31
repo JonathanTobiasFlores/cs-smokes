@@ -1,11 +1,11 @@
 // src/hooks/useLineups.ts
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { LineupAPI } from '../services/api/SupabaseClient';
-import { MMKVStorage } from '../services/storage/MMKVStorage';
+import { AsyncStorageService } from '../services/storage/AsyncStorageService';
 import { LocalDatabase } from '../services/database/LocalDatabase';
 import NetInfo from '@react-native-community/netinfo';
 
-const storage = new MMKVStorage();
+const storage = new AsyncStorageService();
 const localDb = new LocalDatabase();
 
 export function useMapLineups(mapId: string) {
@@ -14,8 +14,8 @@ export function useMapLineups(mapId: string) {
   return useQuery({
     queryKey: ['lineups', mapId],
     queryFn: async () => {
-      // 1. Check MMKV for instant data (< 1ms)
-      const cachedData = storage.getLineups(mapId);
+      // 1. Check AsyncStorage for cached data
+      const cachedData = await storage.getLineups(mapId);
       if (cachedData) {
         // Return cached data immediately
         queryClient.setQueryData(['lineups', mapId], cachedData);

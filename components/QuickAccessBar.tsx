@@ -1,21 +1,29 @@
 // src/components/QuickAccessBar.tsx
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { ScrollView, Pressable, Text, StyleSheet } from 'react-native';
-import { MMKVStorage } from '../services/storage/MMKVStorage';
+import { AsyncStorageService } from '../services/storage/AsyncStorageService';
 
-const storage = new MMKVStorage();
+const storage = new AsyncStorageService();
 
 interface Props {
   onSelectLineup: (lineupId: string) => void;
 }
 
 export function QuickAccessBar({ onSelectLineup }: Props) {
-  const lastViewed = storage.getLastViewed();
+  const [lastViewed, setLastViewed] = useState<string[]>([]);
+
+  useEffect(() => {
+    const loadLastViewed = async () => {
+      const data = await storage.getLastViewed();
+      setLastViewed(data);
+    };
+    loadLastViewed();
+  }, []);
 
   return (
     <ScrollView horizontal showsHorizontalScrollIndicator={false}>
       {/* Recent lineups for instant access */}
-      {lastViewed.map(lineupId => (
+      {lastViewed.map((lineupId: string) => (
         <Pressable 
           key={lineupId}
           onPress={() => onSelectLineup(lineupId)}

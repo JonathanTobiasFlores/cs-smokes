@@ -12,7 +12,7 @@ import {
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../types';
 import { MapCard } from '../components/MapCard';
-import { maps } from '../data/lineups';
+import { useMaps } from '../hooks/useMaps';
 import { theme } from '../theme';
 
 type HomeScreenNavigationProp = NativeStackNavigationProp<RootStackParamList, 'Home'>;
@@ -22,6 +22,8 @@ interface Props {
 }
 
 export const HomeScreen: React.FC<Props> = ({ navigation }) => {
+  const { data: maps, isLoading, error } = useMaps();
+
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar barStyle="light-content" backgroundColor={theme.colors.background} />
@@ -29,16 +31,24 @@ export const HomeScreen: React.FC<Props> = ({ navigation }) => {
       <View style={styles.header}>
         <Text style={styles.title}>CS2 Lineups</Text>
         <Text style={styles.subtitle}>Master your utility usage</Text>
-        <TouchableOpacity 
-          style={styles.testButton}
-          onPress={() => navigation.navigate('UploadTest')}
-        >
-          <Text style={styles.testButtonText}>Test Upload System</Text>
-        </TouchableOpacity>
+        <View style={styles.testButtons}>
+          <TouchableOpacity 
+            style={styles.testButton}
+            onPress={() => navigation.navigate('UploadTest')}
+          >
+            <Text style={styles.testButtonText}>Test Upload</Text>
+          </TouchableOpacity>
+          <TouchableOpacity 
+            style={styles.testButton}
+            onPress={() => navigation.navigate('SupabaseTest')}
+          >
+            <Text style={styles.testButtonText}>Test Connection</Text>
+          </TouchableOpacity>
+        </View>
       </View>
 
       <FlatList
-        data={maps.filter(map => map.active)}
+        data={maps?.filter(map => map.active) || []}
         keyExtractor={(item) => item.id}
         numColumns={2}
         contentContainerStyle={styles.mapList}
@@ -52,6 +62,13 @@ export const HomeScreen: React.FC<Props> = ({ navigation }) => {
             })}
           />
         )}
+        ListEmptyComponent={
+          <View style={styles.emptyState}>
+            <Text style={styles.emptyText}>
+              {isLoading ? 'Loading maps...' : error ? 'Failed to load maps' : 'No maps found'}
+            </Text>
+          </View>
+        }
       />
     </SafeAreaView>
   );
@@ -82,17 +99,30 @@ const styles = StyleSheet.create({
   mapRow: {
     justifyContent: 'space-between',
   },
+  testButtons: {
+    flexDirection: 'row',
+    gap: 10,
+    marginTop: 10,
+  },
   testButton: {
     backgroundColor: '#007AFF',
     paddingHorizontal: 16,
     paddingVertical: 8,
     borderRadius: 8,
-    marginTop: 10,
-    alignSelf: 'flex-start',
   },
   testButtonText: {
     color: '#fff',
     fontSize: 14,
     fontWeight: '600',
+  },
+  emptyState: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingVertical: 50,
+  },
+  emptyText: {
+    color: theme.colors.textSecondary,
+    fontSize: 16,
   },
 });

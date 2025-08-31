@@ -2,7 +2,18 @@
 import React, { useState, useEffect } from 'react';
 import { Asset } from 'expo-asset';
 import { Image } from 'expo-image';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { AppNavigator } from './navigation/AppNavigator';
+
+// Create a client
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      retry: 2,
+      retryDelay: (attemptIndex) => Math.min(1000 * 2 ** attemptIndex, 30000),
+    },
+  },
+});
 
 export default function App() {
   const [isReady, setIsReady] = useState(false);
@@ -30,5 +41,9 @@ export default function App() {
 
   if (!isReady) return null;
   
-  return <AppNavigator />;
+  return (
+    <QueryClientProvider client={queryClient}>
+      <AppNavigator />
+    </QueryClientProvider>
+  );
 }

@@ -2,9 +2,10 @@ import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { HomeScreen } from '../screens/HomeScreen';
-import { MapDetailScreen } from '../screens/MapDetailScreen';
+import { SimplifiedMapScreen } from '../screens/SimplifiedMapScreen';
 import { LineupDetailScreen } from '../screens/LineupDetailScreen';
 import { UploadTest } from '../components/UploadTest';
+import { SupabaseTest } from '../components/SupabaseTest';
 import { RootStackParamList } from '../types';
 import { theme } from '../theme';
 
@@ -36,7 +37,7 @@ export const AppNavigator: React.FC = () => {
         />
         <Stack.Screen 
           name="MapDetail" 
-          component={MapDetailScreen}
+          component={SimplifiedMapScreen}
           options={({ route }) => ({
             title: route.params.mapName,
           })}
@@ -53,6 +54,13 @@ export const AppNavigator: React.FC = () => {
           component={UploadTest}
           options={{
             title: 'Upload Test',
+          }}
+        />
+        <Stack.Screen 
+          name="SupabaseTest" 
+          component={SupabaseTest}
+          options={{
+            title: 'Supabase Test',
           }}
         />
       </Stack.Navigator>
