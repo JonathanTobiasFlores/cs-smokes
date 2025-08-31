@@ -7,6 +7,7 @@ import {
   FlatList,
   SafeAreaView,
   StatusBar,
+  TouchableOpacity,
 } from 'react-native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../types';
@@ -28,6 +29,12 @@ export const HomeScreen: React.FC<Props> = ({ navigation }) => {
       <View style={styles.header}>
         <Text style={styles.title}>CS2 Lineups</Text>
         <Text style={styles.subtitle}>Master your utility usage</Text>
+        <TouchableOpacity 
+          style={styles.testButton}
+          onPress={() => navigation.navigate('UploadTest')}
+        >
+          <Text style={styles.testButtonText}>Test Upload System</Text>
+        </TouchableOpacity>
       </View>
 
       <FlatList
@@ -74,5 +81,18 @@ const styles = StyleSheet.create({
   },
   mapRow: {
     justifyContent: 'space-between',
+  },
+  testButton: {
+    backgroundColor: '#007AFF',
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+    borderRadius: 8,
+    marginTop: 10,
+    alignSelf: 'flex-start',
+  },
+  testButtonText: {
+    color: '#fff',
+    fontSize: 14,
+    fontWeight: '600',
   },
 });

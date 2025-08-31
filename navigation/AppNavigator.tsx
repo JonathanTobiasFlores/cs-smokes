@@ -4,6 +4,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { HomeScreen } from '../screens/HomeScreen';
 import { MapDetailScreen } from '../screens/MapDetailScreen';
 import { LineupDetailScreen } from '../screens/LineupDetailScreen';
+import { UploadTest } from '../components/UploadTest';
 import { RootStackParamList } from '../types';
 import { theme } from '../theme';
 
@@ -45,6 +46,13 @@ export const AppNavigator: React.FC = () => {
           component={LineupDetailScreen}
           options={{
             title: 'Lineup Details',
+          }}
+        />
+        <Stack.Screen 
+          name="UploadTest" 
+          component={UploadTest}
+          options={{
+            title: 'Upload Test',
           }}
         />
       </Stack.Navigator>
